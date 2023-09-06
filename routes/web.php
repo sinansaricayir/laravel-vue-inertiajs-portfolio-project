@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+use App\Mail\ContactMessage;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,9 +21,15 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'skills' => App\Models\Skill::all(),
+        'projects' => App\Models\Project::all(),
     ]);
+});
+
+Route::post('contact-form', [ContactController::class, 'store'])->name('contact-form.store');
+
+Route::get('/test', function () {
+    return new ContactMessage('Sinan Sarıçayır', 'sinan@gmail.com', 'Hello friend!');
 });
 
 Route::middleware([
